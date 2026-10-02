@@ -1,20 +1,17 @@
 import csv
 from collections import defaultdict
+from collections.abc import Iterator
 from pathlib import Path
 
 from models import Conversation, ConversationTurn, TalkmapRow
 
 
-def load_talkmap_rows(path: Path) -> list[TalkmapRow]:
-    rows: list[TalkmapRow] = []
-
+def load_talkmap_rows(path: Path) -> Iterator[TalkmapRow]:
     with path.open("r", encoding="utf-8", newline="") as file:
         reader = csv.DictReader(file)
 
         for raw_row in reader:
-            rows.append(TalkmapRow.model_validate(raw_row))
-
-    return rows
+            yield TalkmapRow.model_validate(raw_row)
 
 
 def reconstruct_conversations(

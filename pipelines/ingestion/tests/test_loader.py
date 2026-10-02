@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
+from pathlib import Path
 
-from loader import reconstruct_conversations
+from loader import load_talkmap_rows, reconstruct_conversations
 from models import TalkmapRow
 
 
@@ -40,3 +41,31 @@ def test_reconstruct_conversations_groups_and_sorts_turns() -> None:
 
     assert first.turns[0].turn_index == 0
     assert first.turns[1].turn_index == 1
+
+
+def test_load_talkmap_rows_streams_validated_rows(tmp_path: Path) -> None:
+    csv_path = tmp_path / "talkmap.csv"
+
+    csv_path.write_text(
+        "conversation_id,speaker,date_time,text\n"
+        "conversation-1,agent,2023-09-09T15:08:03+00:00,"
+        '"How can I help you?"\n'
+        "conversation-1,client,2023-09-09T15:08:10+00:00,"
+        '"My internet is slow."\n',
+        encoding="utf-8",
+    )
+
+    rows = load_talkmap_rows(csv_path)
+
+    assert not isinstance(rows, list)
+
+    first = next(rows)
+
+    assert first.conversation_id == "conversation-1"
+    assert first.speaker == "agent"
+    assert first.text == "How can I help you?"
+
+    second = next(rows)
+
+    assert second.speaker == "client"
+    assert second.text == "My internet is slow."
