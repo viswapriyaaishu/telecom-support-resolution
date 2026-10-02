@@ -1,23 +1,23 @@
 from datetime import UTC, datetime
 from pathlib import Path
 
-from loader import load_talkmap_rows, reconstruct_conversations
+from loader import iter_conversations, load_talkmap_rows
 from models import TalkmapRow
 
 
-def test_reconstruct_conversations_groups_and_sorts_turns() -> None:
+def test_iter_conversations_groups_contiguous_rows() -> None:
     rows = [
-        TalkmapRow(
-            conversation_id="conversation-1",
-            speaker="client",
-            date_time=datetime(2023, 9, 9, 15, 8, 10, tzinfo=UTC),
-            text="I am having connection problems.",
-        ),
         TalkmapRow(
             conversation_id="conversation-1",
             speaker="agent",
             date_time=datetime(2023, 9, 9, 15, 8, 3, tzinfo=UTC),
             text="How can I help you?",
+        ),
+        TalkmapRow(
+            conversation_id="conversation-1",
+            speaker="client",
+            date_time=datetime(2023, 9, 9, 15, 8, 10, tzinfo=UTC),
+            text="I am having connection problems.",
         ),
         TalkmapRow(
             conversation_id="conversation-2",
@@ -27,11 +27,9 @@ def test_reconstruct_conversations_groups_and_sorts_turns() -> None:
         ),
     ]
 
-    conversations = reconstruct_conversations(rows)
+    conversations = iter_conversations(iter(rows))
 
-    assert len(conversations) == 2
-
-    first = conversations[0]
+    first = next(conversations)
 
     assert first.conversation_id == "conversation-1"
     assert len(first.turns) == 2
@@ -41,6 +39,14 @@ def test_reconstruct_conversations_groups_and_sorts_turns() -> None:
 
     assert first.turns[0].turn_index == 0
     assert first.turns[1].turn_index == 1
+
+    second = next(conversations)
+
+    assert second.conversation_id == "conversation-2"
+    assert len(second.turns) == 1
+
+    assert second.turns[0].speaker == "client"
+    assert second.turns[0].turn_index == 0
 
 
 def test_load_talkmap_rows_streams_validated_rows(tmp_path: Path) -> None:

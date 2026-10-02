@@ -1,5 +1,4 @@
 import csv
-from collections import defaultdict
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -14,37 +13,36 @@ def load_talkmap_rows(path: Path) -> Iterator[TalkmapRow]:
             yield TalkmapRow.model_validate(raw_row)
 
 
-def reconstruct_conversations(
-    rows: list[TalkmapRow],
-) -> list[Conversation]:
-    grouped: dict[str, list[TalkmapRow]] = defaultdict(list)
+def iter_conversations(
+    rows: Iterator[TalkmapRow],
+) -> Iterator[Conversation]:
+    current_conversation_id: str | None = None
+    current_turns: list[ConversationTurn] = []
 
     for row in rows:
-        grouped[row.conversation_id].append(row)
+        if current_conversation_id is None:
+            current_conversation_id = row.conversation_id
 
-    conversations: list[Conversation] = []
+        if row.conversation_id != current_conversation_id:
+            yield Conversation(
+                conversation_id=current_conversation_id,
+                turns=current_turns,
+            )
 
-    for conversation_id, conversation_rows in grouped.items():
-        ordered_rows = sorted(
-            conversation_rows,
-            key=lambda row: row.date_time,
-        )
+            current_conversation_id = row.conversation_id
+            current_turns = []
 
-        turns = [
+        current_turns.append(
             ConversationTurn(
-                turn_index=index,
+                turn_index=len(current_turns),
                 speaker=row.speaker,
                 date_time=row.date_time,
                 text=row.text,
             )
-            for index, row in enumerate(ordered_rows)
-        ]
-
-        conversations.append(
-            Conversation(
-                conversation_id=conversation_id,
-                turns=turns,
-            )
         )
 
-    return conversations
+    if current_conversation_id is not None:
+        yield Conversation(
+            conversation_id=current_conversation_id,
+            turns=current_turns,
+        )
