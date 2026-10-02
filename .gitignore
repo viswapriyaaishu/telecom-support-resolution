@@ -70,8 +70,11 @@ logs/
 # Local data
 # ============================================================
 
-data/raw/
-data/processed/
+data/raw/*
+data/processed/*
+
+!data/raw/.gitkeep
+!data/processed/.gitkeep
 
 *.csv
 *.csv.gz
@@ -89,3 +92,4 @@ evaluation/reports/generated/
 # ============================================================
 
 docker-data/
+
