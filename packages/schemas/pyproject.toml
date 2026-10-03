@@ -1,0 +1,16 @@
+[project]
+name = "telecom-support-schemas"
+version = "0.1.0"
+description = "Shared data contracts for the telecom support platform"
+requires-python = ">=3.12,<3.13"
+
+dependencies = [
+    "pydantic>=2.0,<3.0",
+]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

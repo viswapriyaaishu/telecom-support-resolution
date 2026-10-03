@@ -6,7 +6,7 @@ from telecom_support_database.models.ingestion import (
     IngestionRunStatus,
 )
 
-from app.repositories.ingestion_run import IngestionRunRepository
+from app.db.repositories.ingestion_run import IngestionRunRepository
 
 
 class IngestionRunService:
