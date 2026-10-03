@@ -2,8 +2,7 @@ from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
-from app.db.models.conversation import Conversation
+from telecom_support_database.models.conversation import Conversation
 
 
 class ConversationRepository:

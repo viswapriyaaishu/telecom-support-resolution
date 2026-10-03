@@ -1,11 +1,12 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from app.db.models.conversation import (
+from telecom_support_database.models.conversation import (
     Conversation,
     ConversationTurn,
     Speaker,
 )
+
 from app.db.repositories.conversation import ConversationRepository
 
 

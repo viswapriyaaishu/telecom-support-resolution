@@ -1,4 +1,4 @@
-from app.db.models.conversation import (
+from telecom_support_database.models.conversation import (
     Conversation,
     ConversationTurn,
     QualityStatus,

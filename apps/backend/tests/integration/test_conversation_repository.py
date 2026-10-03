@@ -2,8 +2,8 @@ from datetime import UTC, datetime
 
 import pytest
 from sqlalchemy.exc import IntegrityError
+from telecom_support_database.models.conversation import Conversation, Speaker
 
-from app.db.models.conversation import Conversation, Speaker
 from app.db.repositories.conversation import ConversationRepository
 from app.services.conversation import (
     ConversationService,

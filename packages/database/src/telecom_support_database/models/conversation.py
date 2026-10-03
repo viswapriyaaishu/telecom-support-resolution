@@ -14,7 +14,7 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.base import Base
+from telecom_support_database.base import Base
 
 
 class ResolutionStatus(StrEnum):
@@ -26,6 +26,7 @@ class ResolutionStatus(StrEnum):
 
 class QualityStatus(StrEnum):
     VALID = "VALID"
+    INVALID = "INVALID"
     INCOMPLETE = "INCOMPLETE"
     DUPLICATE = "DUPLICATE"
     LOW_QUALITY = "LOW_QUALITY"

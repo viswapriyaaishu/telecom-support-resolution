@@ -1,7 +1,8 @@
 from datetime import UTC, datetime
 from unittest.mock import Mock
 
-from app.db.models.conversation import Conversation, Speaker
+from telecom_support_database.models.conversation import Conversation, Speaker
+
 from app.db.repositories.conversation import ConversationRepository
 from app.services.conversation import (
     ConversationService,
