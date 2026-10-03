@@ -3,11 +3,12 @@ from collections.abc import Iterable
 from datetime import UTC, datetime
 from pathlib import Path
 
+from sqlalchemy.orm import Session
+
 from app.db.repositories.conversation import ConversationRepository
 from app.db.repositories.ingestion_run import IngestionRunRepository
 from app.db.session import SessionLocal
 from app.services.ingestion import IngestionService
-from sqlalchemy.orm import Session
 from telecom_support_ingestion.contract import to_contract
 from telecom_support_ingestion.pipeline import process_talkmap_file
 from telecom_support_ingestion.processed import IngestionMetadata
@@ -44,6 +45,21 @@ def parse_args() -> argparse.Namespace:
         help="Number of conversations persisted per batch.",
     )
     return parser.parse_args()
+
+
+def track_progress(
+    contracts: Iterable[ProcessedConversationContract],
+    *,
+    interval: int = 1_000,
+) -> Iterable[ProcessedConversationContract]:
+    count = 0
+
+    for contract in contracts:
+        yield contract
+        count += 1
+
+        if count % interval == 0:
+            print(f"Processed conversations: {count:,}")
 
 
 def ingest_with_session(
@@ -106,10 +122,17 @@ def main() -> None:
         ingestion_metadata,
     )
 
-    contracts = (
-        to_contract(processed)
-        for processed in processed_conversations
+    contracts = track_progress(
+        (
+            to_contract(processed)
+            for processed in processed_conversations
+        )
     )
+
+    print("Starting Talkmap ingestion...")
+    print(f"Dataset: {dataset_path}")
+    print(f"Dataset version: {args.dataset_version}")
+    print(f"Batch size: {args.batch_size}")
 
     with SessionLocal() as session:
         ingest_with_session(
