@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 from sqlalchemy.orm import Session
 from telecom_support_database.models.ingestion import IngestionRun
@@ -35,6 +35,7 @@ class IngestionService:
         dataset_version: str,
         pipeline_version: str,
         batch_size: int = 100,
+        on_batch_committed: Callable[[IngestionRun], None] | None = None,
     ) -> IngestionRun:
         if batch_size <= 0:
             raise ValueError("batch_size must be greater than zero.")
@@ -79,6 +80,9 @@ class IngestionService:
                     self.session.commit()
                     batch.clear()
 
+                    if on_batch_committed is not None:
+                        on_batch_committed(ingestion_run)
+
             if batch:
                 (
                     records_read,
@@ -97,6 +101,9 @@ class IngestionService:
                 )
 
                 self.session.commit()
+
+                if on_batch_committed is not None:
+                    on_batch_committed(ingestion_run)
 
             self.ingestion_run_service.complete_run(ingestion_run)
             self.session.commit()

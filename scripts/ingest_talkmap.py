@@ -3,17 +3,16 @@ from collections.abc import Iterable
 from datetime import UTC, datetime
 from pathlib import Path
 
-from sqlalchemy.orm import Session
-
 from app.db.repositories.conversation import ConversationRepository
 from app.db.repositories.ingestion_run import IngestionRunRepository
 from app.db.session import SessionLocal
 from app.services.ingestion import IngestionService
+from sqlalchemy.orm import Session
+from telecom_support_database.models.ingestion import IngestionRun
 from telecom_support_ingestion.contract import to_contract
 from telecom_support_ingestion.pipeline import process_talkmap_file
 from telecom_support_ingestion.processed import IngestionMetadata
 from telecom_support_schemas.ingestion import ProcessedConversationContract
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -47,21 +46,6 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def track_progress(
-    contracts: Iterable[ProcessedConversationContract],
-    *,
-    interval: int = 1_000,
-) -> Iterable[ProcessedConversationContract]:
-    count = 0
-
-    for contract in contracts:
-        yield contract
-        count += 1
-
-        if count % interval == 0:
-            print(f"Processed conversations: {count:,}")
-
-
 def ingest_with_session(
     session: Session,
     contracts: Iterable[ProcessedConversationContract],
@@ -79,12 +63,19 @@ def ingest_with_session(
         ingestion_run_repository=ingestion_run_repository,
     )
 
+    def on_batch_committed(run: IngestionRun) -> None:
+        print(
+            f"Committed conversations: "
+            f"{run.records_read:,}"
+        )
+
     run = service.ingest(
         contracts,
         dataset_name="talkmap",
         dataset_version=dataset_version,
         pipeline_version=pipeline_version,
         batch_size=batch_size,
+        on_batch_committed=on_batch_committed,
     )
 
     print(f"Ingestion completed: {run.id}")
@@ -122,11 +113,9 @@ def main() -> None:
         ingestion_metadata,
     )
 
-    contracts = track_progress(
-        (
-            to_contract(processed)
-            for processed in processed_conversations
-        )
+    contracts = (
+        to_contract(processed)
+        for processed in processed_conversations
     )
 
     print("Starting Talkmap ingestion...")
