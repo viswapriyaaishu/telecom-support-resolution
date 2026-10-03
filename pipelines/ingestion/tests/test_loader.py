@@ -1,8 +1,8 @@
 from datetime import UTC, datetime
 from pathlib import Path
 
-from loader import iter_conversations, load_talkmap_rows
-from models import TalkmapRow
+from telecom_support_ingestion.loader import iter_conversations, load_talkmap_rows
+from telecom_support_ingestion.models import TalkmapRow
 
 
 def test_iter_conversations_groups_contiguous_rows() -> None:

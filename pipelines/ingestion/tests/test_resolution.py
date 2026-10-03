@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 
-from models import Conversation, ConversationTurn
-from resolution import (
+from telecom_support_ingestion.models import Conversation, ConversationTurn
+from telecom_support_ingestion.resolution import (
     ResolutionEvidence,
     ResolutionStatus,
     classify_resolution,

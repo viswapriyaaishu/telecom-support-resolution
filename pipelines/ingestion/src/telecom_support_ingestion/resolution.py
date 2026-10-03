@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from models import Conversation
+from .models import Conversation
 
 
 class ResolutionStatus(StrEnum):

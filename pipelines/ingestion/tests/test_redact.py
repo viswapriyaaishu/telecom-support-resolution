@@ -1,4 +1,4 @@
-from redact import redact_sensitive_data
+from telecom_support_ingestion.redact import redact_sensitive_data
 
 
 def test_redact_email() -> None:

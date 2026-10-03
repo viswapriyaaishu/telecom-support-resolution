@@ -30,13 +30,10 @@ select = ["E", "F", "I", "UP", "B"]
 python_version = "3.12"
 strict = true
 files = ["src"]
-mypy_path = "src"
 
 [build-system]
 requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-py-modules = ["loader", "models"]
-
-package-dir = {"" = "src"}
+[tool.setuptools.packages.find]
+where = ["src"]

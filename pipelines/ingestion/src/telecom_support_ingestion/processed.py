@@ -2,9 +2,9 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from models import Conversation
-from quality import QualityIssue, QualityStatus
-from resolution import ResolutionEvidence, ResolutionStatus
+from .models import Conversation
+from .quality import QualityIssue, QualityStatus
+from .resolution import ResolutionEvidence, ResolutionStatus
 
 
 class IngestionMetadata(BaseModel):

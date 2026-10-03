@@ -1,37 +1,34 @@
 from datetime import UTC, datetime
 
-from models import Conversation, ConversationTurn
-from processed import IngestionMetadata, ProcessedConversation
-from quality import QualityStatus as IngestionQualityStatus
-from resolution import (
-    ResolutionEvidence,
-)
-from resolution import (
-    ResolutionStatus as IngestionResolutionStatus,
-)
-from scripts.ingest_talkmap import build_conversation_inputs
 from sqlalchemy.orm import Session
 from telecom_support_database.models.conversation import (
     QualityStatus,
     ResolutionStatus,
     Speaker,
 )
+from telecom_support_schemas.ingestion import (
+    IngestionConversation,
+    IngestionMetadata,
+    IngestionTurn,
+    ProcessedConversationContract,
+)
 
 from app.db.repositories.conversation import ConversationRepository
 from app.services.conversation import ConversationService
+from app.services.ingestion_mapper import build_conversation_inputs
 
 
 def test_processed_conversation_persists_to_database(
     db_session: Session,
 ) -> None:
-    processed = ProcessedConversation(
-        conversation=Conversation(
+    processed = ProcessedConversationContract(
+        conversation=IngestionConversation(
             conversation_id="integration-ingestion-001",
             turns=[
-                ConversationTurn(
+                IngestionTurn(
                     turn_index=0,
                     speaker="client",
-                    date_time=datetime(
+                    timestamp=datetime(
                         2026,
                         10,
                         3,
@@ -41,10 +38,10 @@ def test_processed_conversation_persists_to_database(
                     ),
                     text="My broadband keeps dropping.",
                 ),
-                ConversationTurn(
+                IngestionTurn(
                     turn_index=1,
                     speaker="agent",
-                    date_time=datetime(
+                    timestamp=datetime(
                         2026,
                         10,
                         3,
@@ -69,9 +66,9 @@ def test_processed_conversation_persists_to_database(
                 tzinfo=UTC,
             ),
         ),
-        quality_status=IngestionQualityStatus.VALID,
-        resolution_status=IngestionResolutionStatus.RESOLVED,
-        resolution_evidence=ResolutionEvidence.CUSTOMER_CONFIRMED,
+        quality_status="VALID",
+        resolution_status="RESOLVED",
+        resolution_evidence="CUSTOMER_CONFIRMED",
     )
 
     repository = ConversationRepository(db_session)

@@ -1,4 +1,4 @@
-from normalize import normalize_text
+from telecom_support_ingestion.normalize import normalize_text
 
 
 def test_normalize_text_strips_outer_whitespace() -> None:

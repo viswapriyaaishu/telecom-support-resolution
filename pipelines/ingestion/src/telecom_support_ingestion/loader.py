@@ -2,7 +2,7 @@ import csv
 from collections.abc import Iterator
 from pathlib import Path
 
-from models import Conversation, ConversationTurn, TalkmapRow
+from .models import Conversation, ConversationTurn, TalkmapRow
 
 
 def load_talkmap_rows(path: Path) -> Iterator[TalkmapRow]:

@@ -5,7 +5,7 @@ from telecom_support_schemas.ingestion import (
     ProcessedConversationContract,
 )
 
-from processed import ProcessedConversation
+from .processed import ProcessedConversation
 
 
 def to_contract(

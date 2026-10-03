@@ -1,10 +1,10 @@
 from datetime import UTC, datetime
 
-from models import Conversation, ConversationTurn
-from pipeline import process_conversation
-from processed import IngestionMetadata
-from quality import QualityStatus
-from resolution import ResolutionStatus
+from telecom_support_ingestion.models import Conversation, ConversationTurn
+from telecom_support_ingestion.pipeline import process_conversation
+from telecom_support_ingestion.processed import IngestionMetadata
+from telecom_support_ingestion.quality import QualityStatus
+from telecom_support_ingestion.resolution import ResolutionStatus
 
 INGESTION_METADATA = IngestionMetadata(
     source_dataset="talkmap-telecom-conversation-corpus",

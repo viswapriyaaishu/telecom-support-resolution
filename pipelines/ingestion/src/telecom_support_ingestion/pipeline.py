@@ -1,13 +1,13 @@
 from collections.abc import Iterator
 from pathlib import Path
 
-from loader import iter_conversations, load_talkmap_rows
-from models import Conversation
-from normalize import normalize_text
-from processed import IngestionMetadata, ProcessedConversation
-from quality import validate_conversation
-from redact import redact_sensitive_data
-from resolution import classify_resolution
+from .loader import iter_conversations, load_talkmap_rows
+from .models import Conversation
+from .normalize import normalize_text
+from .processed import IngestionMetadata, ProcessedConversation
+from .quality import validate_conversation
+from .redact import redact_sensitive_data
+from .resolution import classify_resolution
 
 
 def process_conversation(
