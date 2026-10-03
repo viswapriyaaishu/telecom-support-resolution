@@ -17,14 +17,12 @@ def db_session() -> Generator[Session, None, None]:
     )
 
     connection = engine.connect()
-    transaction = connection.begin()
-
     session = Session(bind=connection)
 
     try:
         yield session
     finally:
+        session.rollback()
         session.close()
-        transaction.rollback()
         connection.close()
         engine.dispose()
