@@ -114,3 +114,18 @@ def test_escalation_takes_precedence() -> None:
 
     assert status == ResolutionStatus.ESCALATED
     assert evidence == ResolutionEvidence.ESCALATION_REQUIRED
+
+
+def test_initial_not_working_followed_by_fix_is_resolved() -> None:
+    conversation = make_conversation(
+        [
+            "My internet was not working.",
+            "Please restart the router.",
+            "That fixed it. It is working now.",
+        ]
+    )
+
+    status, evidence = classify_resolution(conversation)
+
+    assert status == ResolutionStatus.RESOLVED
+    assert evidence == ResolutionEvidence.CUSTOMER_CONFIRMED

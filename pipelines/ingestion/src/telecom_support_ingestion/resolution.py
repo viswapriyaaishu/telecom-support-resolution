@@ -49,7 +49,6 @@ _UNSUCCESSFUL_PHRASES = (
     "still does not work",
     "hasn't helped",
     "have not helped",
-    "not working",
 )
 
 
