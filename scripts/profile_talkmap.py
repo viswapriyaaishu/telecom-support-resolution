@@ -3,7 +3,6 @@ import re
 from collections import Counter
 from pathlib import Path
 
-
 DATASET_PATH = Path("data/raw/telecom_200k.csv")
 
 MAX_TEXT_LENGTH_SAMPLE = 10

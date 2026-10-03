@@ -2,7 +2,6 @@ import csv
 import re
 from pathlib import Path
 
-
 DATASET_PATH = Path("data/raw/telecom_200k.csv")
 MAX_EXAMPLES_PER_CATEGORY = 5
 CONTEXT_RADIUS = 60
