@@ -23,6 +23,7 @@ def make_processed(
     conversation_id: str = "conv-001",
     quality_status: str = "VALID",
     resolution_status: str = "RESOLVED",
+    redaction_applied: bool = False,
 ) -> ProcessedConversationContract:
     return ProcessedConversationContract(
         conversation=IngestionConversation(
@@ -66,6 +67,7 @@ def make_processed(
         quality_issues=[],
         resolution_status=resolution_status,
         resolution_evidence="CUSTOMER_CONFIRMED",
+        redaction_applied=redaction_applied,
     )
 
 
@@ -294,3 +296,32 @@ def test_ingest_marks_run_failed_when_batch_fails() -> None:
     session.rollback.assert_called_once()
     assert ingestion_run.status == IngestionRunStatus.FAILED
     assert ingestion_run.completed_at is not None
+
+
+def test_ingest_counts_redacted_conversation() -> None:
+    (
+        service,
+        session,
+        conversation_repository,
+        ingestion_run_repository,
+    ) = make_service()
+
+    ingestion_run = make_ingestion_run()
+
+    ingestion_run_repository.create.return_value = ingestion_run
+    conversation_repository.get_by_external_id.return_value = None
+
+    processed = make_processed(redaction_applied=True)
+
+    result = service.ingest(
+        [processed],
+        dataset_name="talkmap",
+        dataset_version="v1",
+        pipeline_version="v1",
+    )
+
+    assert result.status == IngestionRunStatus.COMPLETED
+    assert ingestion_run.records_read == 1
+    assert ingestion_run.records_valid == 1
+    assert ingestion_run.records_redacted == 1
+    assert ingestion_run.records_deduplicated == 0

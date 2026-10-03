@@ -37,3 +37,4 @@ class ProcessedConversationContract(BaseModel):
     quality_issues: list[str] = Field(default_factory=list)
     resolution_status: str
     resolution_evidence: str
+    redaction_applied: bool

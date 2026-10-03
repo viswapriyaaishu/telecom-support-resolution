@@ -36,4 +36,5 @@ def to_contract(
         ],
         resolution_status=processed.resolution_status.value,
         resolution_evidence=processed.resolution_evidence.value,
+        redaction_applied=processed.redaction_applied,
     )

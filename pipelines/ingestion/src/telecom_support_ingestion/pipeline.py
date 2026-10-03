@@ -15,11 +15,15 @@ def process_conversation(
     ingestion: IngestionMetadata,
 ) -> ProcessedConversation:
     normalized_turns = []
+    redaction_applied = False
 
     for turn in conversation.turns:
         normalized_text = normalize_text(turn.text)
 
         redacted_text = redact_sensitive_data(normalized_text)
+
+        if redacted_text != normalized_text:
+            redaction_applied = True
 
         normalized_turns.append(
             turn.model_copy(
@@ -46,6 +50,7 @@ def process_conversation(
         quality_issues=quality_issues,
         resolution_status=resolution_status,
         resolution_evidence=resolution_evidence,
+        redaction_applied=redaction_applied,
     )
 
 

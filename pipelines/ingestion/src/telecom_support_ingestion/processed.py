@@ -25,3 +25,4 @@ class ProcessedConversation(BaseModel):
     quality_issues: list[QualityIssue] = Field(default_factory=list)
     resolution_status: ResolutionStatus
     resolution_evidence: ResolutionEvidence
+    redaction_applied: bool

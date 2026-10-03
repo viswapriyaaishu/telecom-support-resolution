@@ -136,6 +136,9 @@ class IngestionService:
 
             records_valid += 1
 
+            if processed.redaction_applied:
+                records_redacted += 1
+
             existing = self.conversation_repository.get_by_external_id(
                 source_dataset=processed.ingestion.source_dataset,
                 dataset_version=processed.ingestion.dataset_version,

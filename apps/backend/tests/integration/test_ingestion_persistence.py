@@ -69,6 +69,7 @@ def test_processed_conversation_persists_to_database(
         quality_status="VALID",
         resolution_status="RESOLVED",
         resolution_evidence="CUSTOMER_CONFIRMED",
+        redaction_applied=False,
     )
 
     repository = ConversationRepository(db_session)
