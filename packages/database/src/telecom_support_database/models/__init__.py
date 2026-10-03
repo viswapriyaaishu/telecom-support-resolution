@@ -1,15 +1,21 @@
 from telecom_support_database.models.conversation import (
-    Conversation,
-    ConversationTurn,
-    QualityStatus,
-    ResolutionStatus,
-    Speaker,
+    Conversation as Conversation,
 )
-
-__all__ = [
-    "Conversation",
-    "ConversationTurn",
-    "QualityStatus",
-    "ResolutionStatus",
-    "Speaker",
-]
+from telecom_support_database.models.conversation import (
+    ConversationTurn as ConversationTurn,
+)
+from telecom_support_database.models.conversation import (
+    QualityStatus as QualityStatus,
+)
+from telecom_support_database.models.conversation import (
+    ResolutionStatus as ResolutionStatus,
+)
+from telecom_support_database.models.conversation import (
+    Speaker as Speaker,
+)
+from telecom_support_database.models.ingestion import (
+    IngestionRun as IngestionRun,
+)
+from telecom_support_database.models.ingestion import (
+    IngestionRunStatus as IngestionRunStatus,
+)
