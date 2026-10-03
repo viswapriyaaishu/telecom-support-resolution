@@ -1,7 +1,12 @@
 from datetime import UTC, datetime
 from unittest.mock import Mock
 
-from telecom_support_database.models.conversation import Conversation, Speaker
+from telecom_support_database.models.conversation import (
+    Conversation,
+    QualityStatus,
+    ResolutionStatus,
+    Speaker,
+)
 
 from app.db.repositories.conversation import ConversationRepository
 from app.services.conversation import (
@@ -90,6 +95,8 @@ def test_create_with_turns_builds_conversation_and_turns() -> None:
         source_dataset="talkmap",
         dataset_version="test-v1",
         product="broadband",
+        quality_status=QualityStatus.VALID,
+        resolution_status=ResolutionStatus.RESOLVED,
         turns=[
             ConversationTurnInput(
                 turn_index=0,
@@ -115,6 +122,8 @@ def test_create_with_turns_builds_conversation_and_turns() -> None:
     assert created_conversation.source_dataset == "talkmap"
     assert created_conversation.dataset_version == "test-v1"
     assert created_conversation.product == "broadband"
+    assert created_conversation.quality_status == QualityStatus.VALID
+    assert created_conversation.resolution_status == ResolutionStatus.RESOLVED
 
     assert len(created_conversation.turns) == 2
 

@@ -4,6 +4,8 @@ from datetime import datetime
 from telecom_support_database.models.conversation import (
     Conversation,
     ConversationTurn,
+    QualityStatus,
+    ResolutionStatus,
     Speaker,
 )
 
@@ -56,12 +58,16 @@ class ConversationService:
         dataset_version: str,
         turns: list[ConversationTurnInput],
         product: str | None = None,
+        quality_status: QualityStatus = QualityStatus.REVIEW,
+        resolution_status: ResolutionStatus = ResolutionStatus.UNKNOWN,
     ) -> Conversation:
         conversation = Conversation(
             external_id=external_id,
             source_dataset=source_dataset,
             dataset_version=dataset_version,
             product=product,
+            quality_status=quality_status,
+            resolution_status=resolution_status,
         )
 
         conversation.turns = [
