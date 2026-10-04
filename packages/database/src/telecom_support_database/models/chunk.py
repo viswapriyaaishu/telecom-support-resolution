@@ -2,7 +2,15 @@ from datetime import datetime
 from uuid import UUID, uuid4
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, Text, func
+from sqlalchemy import (
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    Text,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -49,5 +57,10 @@ class ConversationChunk(Base):
         Index(
             "ix_conversation_chunks_conversation_id",
             "conversation_id",
+        ),
+        UniqueConstraint(
+            "conversation_id",
+            "chunk_index",
+            name="uq_conversation_chunks_conversation_index",
         ),
     )

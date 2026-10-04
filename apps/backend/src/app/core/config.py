@@ -14,6 +14,11 @@ class Settings(BaseSettings):
 
     database_url: str = ""
 
+    llm_provider: str = ""
+    llm_base_url: str = ""
+    llm_api_key: str = ""
+    llm_model: str = ""
+
     model_config = SettingsConfigDict(
         env_file=PROJECT_ROOT / ".env",
         env_file_encoding="utf-8",

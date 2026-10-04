@@ -93,3 +93,7 @@ evaluation/reports/generated/
 
 docker-data/
 
+
+# Generated embedding checkpoints
+data/embedding_checkpoint/
+data/embedding_checkpoint_1033/
