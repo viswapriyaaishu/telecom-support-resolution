@@ -6,52 +6,98 @@ The system helps support agents resolve customer complaints by combining structu
 
 ---
 
-## Table of Contents
+**## Table of Contents**
 
 - [1. Problem Background](#1-problem-background)
+
 - [2. Solution](#2-solution)
+
 - [3. Architecture](#3-architecture)
-- [4. Technology Stack](#4-technology-stack)
-- [5. End-to-End Resolution Flow](#5-end-to-end-resolution-flow)
-- [6. Complaint Intelligence](#6-complaint-intelligence)
-- [7. Semantic Retrieval](#7-semantic-retrieval)
-- [8. PostgreSQL Full-Text Search](#8-postgresql-full-text-search)
-- [9. Hybrid Retrieval](#9-hybrid-retrieval)
-- [10. Retrieval Evaluation](#10-retrieval-evaluation)
-- [11. Evidence Policy](#11-evidence-policy)
-- [12. Grounded Resolution Generation](#12-grounded-resolution-generation)
-- [13. Grounding Validation and Safety](#13-grounding-validation-and-safety)
-- [14. Handling Evolving Ticket Classes](#14-handling-evolving-ticket-classes)
-- [15. Data Pipeline](#15-data-pipeline)
-- [16. Database Design](#16-database-design)
-- [17. Performance Optimization](#17-performance-optimization)
-- [18. End-to-End Performance](#18-end-to-end-performance)
-- [19. Monitoring and System Health](#19-monitoring-and-system-health)
-- [20. Failure and Rate-Limit Handling](#20-failure-and-rate-limit-handling)
-- [21. API](#21-api)
-- [22. Frontend](#22-frontend)
-- [23. Screenshots](#23-screenshots)
-- [24. Production-Scale Considerations](#24-production-scale-considerations)
-- [25. Security and Privacy](#25-security-and-privacy)
-- [26. Testing](#26-testing)
-- [27. Repository Structure](#27-repository-structure)
-- [28. Documentation](#28-documentation)
-- [29. Prerequisites](#29-prerequisites)
-- [30. Environment Configuration](#30-environment-configuration)
-- [31. Running PostgreSQL](#31-running-postgresql)
-- [32. Backend Setup](#32-backend-setup)
-- [33. Frontend Setup](#33-frontend-setup)
-- [34. Running the Full System](#34-running-the-full-system)
-- [35. Database Migrations](#35-database-migrations)
-- [36. Running Retrieval Evaluation](#36-running-retrieval-evaluation)
-- [37. Monitoring](#37-monitoring)
-- [38. Development Quality Checks](#38-development-quality-checks)
-- [39. Current Measured System Results](#39-current-measured-system-results)
-- [40. Design Decisions](#40-design-decisions)
-- [41. Limitations](#41-limitations)
-- [42. Future Improvements](#42-future-improvements)
-- [43. Project Status](#43-project-status)
-- [44. Conclusion](#44-conclusion)
+
+- [4. Dataset](#4-dataset)
+
+- [5. Technology Stack](#5-technology-stack)
+
+- [6. End-to-End Resolution Flow](#6-end-to-end-resolution-flow)
+
+- [7. Complaint Intelligence](#7-complaint-intelligence)
+
+- [8. Semantic Retrieval](#8-semantic-retrieval)
+
+- [9. PostgreSQL Full-Text Search](#9-postgresql-full-text-search)
+
+- [10. Hybrid Retrieval](#10-hybrid-retrieval)
+
+- [11. Retrieval Evaluation](#11-retrieval-evaluation)
+
+- [12. Evidence Policy](#12-evidence-policy)
+
+- [13. Grounded Resolution Generation](#13-grounded-resolution-generation)
+
+- [14. Grounding Validation and Safety](#14-grounding-validation-and-safety)
+
+- [15. Handling Evolving Ticket Classes](#15-handling-evolving-ticket-classes)
+
+- [16. Data Pipeline](#16-data-pipeline)
+
+- [17. Database Design](#17-database-design)
+
+- [18. Performance Optimization](#18-performance-optimization)
+
+- [19. End-to-End Performance](#19-end-to-end-performance)
+
+- [20. Monitoring and System Health](#20-monitoring-and-system-health)
+
+- [21. Failure and Rate-Limit Handling](#21-failure-and-rate-limit-handling)
+
+- [22. API](#22-api)
+
+- [23. Frontend](#23-frontend)
+
+- [24. Screenshots](#24-screenshots)
+
+- [25. Production-Scale Considerations](#25-production-scale-considerations)
+
+- [26. Security and Privacy](#26-security-and-privacy)
+
+- [27. Testing](#27-testing)
+
+- [28. Repository Structure](#28-repository-structure)
+
+- [29. Documentation](#29-documentation)
+
+- [30. Prerequisites](#30-prerequisites)
+
+- [31. Environment Configuration](#31-environment-configuration)
+
+- [32. Running PostgreSQL](#32-running-postgresql)
+
+- [33. Backend Setup](#33-backend-setup)
+
+- [34. Frontend Setup](#34-frontend-setup)
+
+- [35. Running the Full System](#35-running-the-full-system)
+
+- [36. Database Migrations](#36-database-migrations)
+
+- [37. Running Retrieval Evaluation](#37-running-retrieval-evaluation)
+
+- [38. Monitoring](#38-monitoring)
+
+- [39. Development Quality Checks](#39-development-quality-checks)
+
+- [40. Current Measured System Results](#40-current-measured-system-results)
+
+- [41. Design Decisions](#41-design-decisions)
+
+- [42. Limitations](#42-limitations)
+
+- [43. Future Improvements](#43-future-improvements)
+
+- [44. Project Status](#44-project-status)
+
+- [45. Conclusion](#45-conclusion)
+
 - [License](#license)
 
 ---
@@ -162,7 +208,29 @@ This separation makes individual components independently testable and replaceab
 
 ---
 
-## 4. Technology Stack
+## 4. Dataset
+
+This project uses the **Telecom Conversation Corpus** dataset from Hugging Face:
+
+**Dataset:** `talkmap/telecom-conversation-corpus`
+
+The dataset contains synthetically generated telecom customer-service conversations between customers and support agents. It is used as the historical support-ticket/conversation corpus for semantic retrieval and resolution generation.
+
+**Source:** [Telecom Conversation Corpus — Hugging Face](https://huggingface.co/datasets/talkmap/telecom-conversation-corpus)
+
+The raw conversations are processed into searchable conversation chunks, embedded using `BAAI/bge-large-en-v1.5`, and stored in PostgreSQL with pgvector.
+
+**Current searchable corpus:**
+
+- **229,652** conversation chunks
+- **229,652** embeddings
+- **0** missing embeddings
+- **1024-dimensional** BGE-large embeddings
+- Resolved conversations are prioritized for historical-resolution retrieval
+
+The dataset is used as historical support data; the knowledge base is maintained separately as the authoritative source for troubleshooting instructions and resolution guidance.
+
+## 5. Technology Stack
 
 | Layer | Technology |
 |---|---|
@@ -187,7 +255,7 @@ This separation makes individual components independently testable and replaceab
 
 ---
 
-## 5. End-to-End Resolution Flow
+## 6. End-to-End Resolution Flow
 
 ### Step 1: Complaint Input
 
@@ -263,7 +331,7 @@ The request is logged for operational and quality monitoring.
 
 ---
 
-## 6. Complaint Intelligence
+## 7. Complaint Intelligence
 
 The complaint intelligence layer converts unstructured complaints into structured attributes.
 
@@ -301,7 +369,7 @@ The top-level intent is controlled through an enum while `product` and `sub_inte
 
 ---
 
-## 7. Semantic Retrieval
+## 8. Semantic Retrieval
 
 The system uses `BAAI/bge-large-en-v1.5` embeddings.
 
@@ -328,7 +396,7 @@ The retrieval layer filters historical conversations to **resolved cases** befor
 
 ---
 
-## 8. PostgreSQL Full-Text Search
+## 9. PostgreSQL Full-Text Search
 
 Semantic search is complemented by PostgreSQL Full-Text Search via a GIN index:
 
@@ -347,7 +415,7 @@ FTS is especially useful when exact technical terminology matters: `router`, `WA
 
 ---
 
-## 9. Hybrid Retrieval
+## 10. Hybrid Retrieval
 
 The system combines semantic and lexical candidates using **Reciprocal Rank Fusion (RRF)**:
 
@@ -365,7 +433,7 @@ RRF combines relative rankings rather than requiring scores to be calibrated to 
 
 ---
 
-## 10. Retrieval Evaluation
+## 11. Retrieval Evaluation
 
 A manually curated golden retrieval set of **30 evaluation queries** was created.
 
@@ -401,7 +469,7 @@ Golden data is stored in: `data/evaluation/golden_retrieval.json`
 
 ---
 
-## 11. Evidence Policy
+## 12. Evidence Policy
 
 Retrieved results are not directly passed to the LLM. The evidence policy separates sources into:
 
@@ -422,7 +490,7 @@ The knowledge base is treated as the **authoritative source of truth**. Historic
 
 ---
 
-## 12. Grounded Resolution Generation
+## 13. Grounded Resolution Generation
 
 The resolution service constructs a structured prompt containing:
 
@@ -469,7 +537,7 @@ The LLM is instructed to:
 
 ---
 
-## 13. Grounding Validation and Safety
+## 14. Grounding Validation and Safety
 
 Generated troubleshooting steps are validated after LLM generation:
 
@@ -506,7 +574,7 @@ The final resolution included: `KB-CONN-001`, Section: `1. Intermittent Broadban
 
 ---
 
-## 14. Handling Evolving Ticket Classes
+## 15. Handling Evolving Ticket Classes
 
 Telecom support data changes continuously. New products, services, sub-intents, failure modes, and customer terminology can appear over time.
 
@@ -537,7 +605,7 @@ This can be introduced without changing the underlying conversation schema.
 
 ---
 
-## 15. Data Pipeline
+## 16. Data Pipeline
 
 ```
 Raw Support Dataset
@@ -569,7 +637,7 @@ Embedding Generation
 
 ---
 
-## 16. Database Design
+## 17. Database Design
 
 **Important entities:**
 
@@ -591,7 +659,7 @@ Embedding Generation
 
 ---
 
-## 17. Performance Optimization
+## 18. Performance Optimization
 
 ### Embedding Model Preload
 
@@ -626,7 +694,7 @@ This reduces prompt size, token consumption, conflicting context, and LLM latenc
 
 ---
 
-## 18. End-to-End Performance
+## 19. End-to-End Performance
 
 **Representative warm resolution request:**
 
@@ -648,7 +716,7 @@ The main latency contributors are complaint intelligence and LLM resolution gene
 
 ---
 
-## 19. Monitoring and System Health
+## 20. Monitoring and System Health
 
 Each resolution request is logged. Tracked fields include:
 
@@ -686,7 +754,7 @@ Errors: RuntimeError:        2
 
 ---
 
-## 20. Failure and Rate-Limit Handling
+## 21. Failure and Rate-Limit Handling
 
 The LLM provider layer explicitly handles provider throttling:
 
@@ -717,7 +785,7 @@ FastAPI  -->  HTTP 503 + Retry-After
 
 ---
 
-## 21. API
+## 22. API
 
 ### Resolve Endpoint
 
@@ -759,7 +827,7 @@ GET /api/v1/health
 
 ---
 
-## 22. Frontend
+## 23. Frontend
 
 The frontend is implemented using **React + TypeScript + Vite**.
 
@@ -785,7 +853,7 @@ The frontend communicates with the FastAPI backend.
 
 ---
 
-## 23. Screenshots
+## 24. Screenshots
 
 ### Use Case 2 — Intelligent Support Ticket Resolution Assistant
 
@@ -803,7 +871,7 @@ The following screenshots demonstrate the end-to-end support resolution workflow
 
 ![Generated resolution and evidence](docs/images/use-case-2-resolution3.png)
 
-## 24. Production-Scale Considerations
+## 25. Production-Scale Considerations
 
 ### Database Scaling
 
@@ -866,7 +934,7 @@ Load Balancer
 
 ---
 
-## 25. Security and Privacy
+## 26. Security and Privacy
 
 ### Secrets
 
@@ -910,7 +978,7 @@ Before external deployment, the application should include agent authentication,
 
 ---
 
-## 26. Testing
+## 27. Testing
 
 The repository contains tests covering:
 
@@ -937,7 +1005,7 @@ The repository contains tests covering:
 
 ---
 
-## 27. Repository Structure
+## 28. Repository Structure
 
 ```
 telecom-support-resolution/
@@ -997,7 +1065,7 @@ telecom-support-resolution/
 
 ---
 
-## 28. Documentation
+## 29. Documentation
 
 The `docs/` directory is reserved for supporting technical documentation,
 including:
@@ -1011,7 +1079,7 @@ including:
 
 ---
 
-## 29. Prerequisites
+## 30. Prerequisites
 
 **Required:**
 
@@ -1037,7 +1105,7 @@ including:
 
 ---
 
-## 30. Environment Configuration
+## 31. Environment Configuration
 
 Copy the example environment file:
 
@@ -1064,7 +1132,7 @@ LLM_MODEL=<your-model>
 
 ---
 
-## 31. Running PostgreSQL
+## 32. Running PostgreSQL
 
 **Start PostgreSQL + pgvector:**
 
@@ -1088,7 +1156,7 @@ docker compose down
 
 ---
 
-## 32. Backend Setup
+## 33. Backend Setup
 
 **Create the Python environment:**
 
@@ -1123,7 +1191,7 @@ alembic -c .\apps\backend\alembic.ini upgrade head
 
 ---
 
-## 33. Frontend Setup
+## 34. Frontend Setup
 
 **Navigate to the frontend:**
 
@@ -1147,7 +1215,7 @@ Frontend available at: `http://localhost:5173`
 
 ---
 
-## 34. Running the Full System
+## 35. Running the Full System
 
 **Terminal 1 — Database:**
 
@@ -1175,7 +1243,7 @@ Frontend: `http://localhost:5173`
 
 ---
 
-## 35. Database Migrations
+## 36. Database Migrations
 
 Alembic manages database schema changes.
 
@@ -1201,7 +1269,7 @@ alembic -c .\apps\backend\alembic.ini upgrade head
 
 ---
 
-## 36. Running Retrieval Evaluation
+## 37. Running Retrieval Evaluation
 
 ```powershell
 .\apps\backend\.venv\Scripts\python.exe .\scripts\evaluate_retrieval.py
@@ -1213,7 +1281,7 @@ The evaluator compares Semantic, FTS, and Hybrid RRF against `data/evaluation/go
 
 ---
 
-## 37. Monitoring
+## 38. Monitoring
 
 **Run monitoring for one hour:**
 
@@ -1231,7 +1299,7 @@ The evaluator compares Semantic, FTS, and Hybrid RRF against `data/evaluation/go
 
 ---
 
-## 38. Development Quality Checks
+## 39. Development Quality Checks
 
 **Linting:**
 
@@ -1259,7 +1327,7 @@ pytest
 
 ---
 
-## 39. Current Measured System Results
+## 40. Current Measured System Results
 
 ### Dataset
 
@@ -1314,7 +1382,7 @@ pytest
 
 ---
 
-## 40. Design Decisions
+## 41. Design Decisions
 
 ### Why PostgreSQL + pgvector?
 
@@ -1350,7 +1418,7 @@ LLMs can produce plausible but unsupported troubleshooting steps. Grounding vali
 
 ---
 
-## 41. Limitations
+## 42. Limitations
 
 ### 1. Retrieval Quality
 
@@ -1382,7 +1450,7 @@ The current deployment is primarily Docker Compose + FastAPI + React + PostgreSQ
 
 ---
 
-## 42. Future Improvements
+## 43. Future Improvements
 
 ### Retrieval
 
@@ -1433,7 +1501,7 @@ The current deployment is primarily Docker Compose + FastAPI + React + PostgreSQ
 
 ---
 
-## 43. Project Status
+## 44. Project Status
 
 | Component | Status |
 |---|---|
@@ -1461,7 +1529,7 @@ The current deployment is primarily Docker Compose + FastAPI + React + PostgreSQ
 
 ---
 
-## 44. Conclusion
+## 45. Conclusion
 
 This project implements an **evidence-grounded semantic resolution assistant** for telecom customer support.
 
