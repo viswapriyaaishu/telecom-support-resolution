@@ -4,7 +4,9 @@ A production-oriented semantic resolution assistant for telecom customer support
 
 The system helps support agents resolve customer complaints by combining structured complaint analysis, semantic retrieval, PostgreSQL full-text search, hybrid ranking, authoritative knowledge-base evidence, grounded LLM-generated resolutions, safety validation, evaluation, and operational monitoring.
 
-**## Table of Contents**
+---
+
+## Table of Contents
 - [1. Problem Background](#1-problem-background)
 - [2. Solution](#2-solution)
 - [3. Architecture](#3-architecture)
