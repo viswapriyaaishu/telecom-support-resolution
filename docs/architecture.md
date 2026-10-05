@@ -82,8 +82,11 @@ flowchart TD
     H --> V
     K --> V
     U --> V
+```
 
-    ## 3. Request Flow
+---
+
+## 3. Request Flow
 
 A support agent submits a customer complaint through the React frontend.
 
@@ -93,21 +96,21 @@ Example:
 
 The request follows these stages:
 
-1.  The React frontend sends the complaint to the FastAPI backend. 
-2.  The Complaint Intelligence Service classifies the complaint. 
-3.  The system extracts intent, sub-intent, product, severity, sentiment, and entities. 
-4.  The complaint is converted into an embedding. 
-5.  Semantic retrieval searches historical resolved conversations. 
-6.  PostgreSQL Full-Text Search performs lexical retrieval. 
-7.  Semantic and lexical candidates are combined using Reciprocal Rank Fusion. 
-8.  Knowledge-base retrieval searches authoritative troubleshooting information. 
-9.  The Evidence Policy limits and prioritizes the retrieved evidence. 
-10.  A grounded prompt is constructed. 
-11.  The LLM generates a structured resolution. 
-12.  Grounding validation checks the generated troubleshooting steps. 
-13.  Unsupported recommendations trigger a safety fallback. 
-14.  The final structured response is returned to the frontend. 
-15.  Resolution metadata and performance information are logged. 
+1. The React frontend sends the complaint to the FastAPI backend.
+2. The Complaint Intelligence Service classifies the complaint.
+3. The system extracts intent, sub-intent, product, severity, sentiment, and entities.
+4. The complaint is converted into an embedding.
+5. Semantic retrieval searches historical resolved conversations.
+6. PostgreSQL Full-Text Search performs lexical retrieval.
+7. Semantic and lexical candidates are combined using Reciprocal Rank Fusion.
+8. Knowledge-base retrieval searches authoritative troubleshooting information.
+9. The Evidence Policy limits and prioritizes the retrieved evidence.
+10. A grounded prompt is constructed.
+11. The LLM generates a structured resolution.
+12. Grounding validation checks the generated troubleshooting steps.
+13. Unsupported recommendations trigger a safety fallback.
+14. The final structured response is returned to the frontend.
+15. Resolution metadata and performance information are logged.
 
 ---
 
@@ -115,19 +118,19 @@ The request follows these stages:
 
 The frontend is implemented using:
 
--  React 
--  TypeScript 
--  Vite 
+- React
+- TypeScript
+- Vite
 
 The frontend provides the support-agent interface for submitting complaints and viewing:
 
--  Complaint intelligence 
--  Retrieved evidence 
--  Generated resolution 
--  Recommended troubleshooting steps 
--  Escalation decision 
--  Confidence 
--  Citations 
+- Complaint intelligence
+- Retrieved evidence
+- Generated resolution
+- Recommended troubleshooting steps
+- Escalation decision
+- Confidence
+- Citations
 
 The frontend communicates with the backend through the FastAPI HTTP API.
 
@@ -140,9 +143,6 @@ The backend is implemented using FastAPI.
 The main resolution endpoint is:
 
 ```
-```
-
-```
 POST /api/v1/resolve
 ```
 
@@ -150,14 +150,14 @@ The request contains the customer's complaint.
 
 The API performs:
 
--  Request validation 
--  Complaint intelligence analysis 
--  Retrieval 
--  Evidence construction 
--  Resolution generation 
--  Grounding validation 
--  Structured response generation 
--  Resolution logging 
+- Request validation
+- Complaint intelligence analysis
+- Retrieval
+- Evidence construction
+- Resolution generation
+- Grounding validation
+- Structured response generation
+- Resolution logging
 
 The API also handles provider rate limits.
 
@@ -170,9 +170,6 @@ If the LLM provider returns HTTP 429, the backend converts it into a controlled 
 The Complaint Intelligence Service converts unstructured customer complaints into structured attributes.
 
 The current schema contains:
-
-```
-```
 
 ```
 intent
@@ -188,9 +185,6 @@ model_version
 The controlled top-level intent taxonomy currently includes:
 
 ```
-```
-
-```
 Connectivity
 Mobile
 Billing
@@ -202,9 +196,6 @@ Other
 Severity levels:
 
 ```
-```
-
-```
 LOW
 MEDIUM
 HIGH
@@ -213,9 +204,6 @@ UNKNOWN
 ```
 
 Sentiment levels:
-
-```
-```
 
 ```
 POSITIVE
@@ -237,25 +225,16 @@ The retrieval architecture uses two complementary retrieval strategies.
 Historical support conversations are embedded using:
 
 ```
-```
-
-```
 BAAI/bge-large-en-v1.5
 ```
 
 The embedding dimension is:
 
 ```
-```
-
-```
 1024
 ```
 
 The database currently contains:
-
-```
-```
 
 ```
 229,652 embedded conversation chunks
@@ -266,16 +245,10 @@ Semantic retrieval uses PostgreSQL with pgvector and an HNSW index.
 The vector index is:
 
 ```
-```
-
-```
 ix_conversation_chunks_embedding_hnsw
 ```
 
 The HNSW index uses:
-
-```
-```
 
 ```
 vector_cosine_ops
@@ -292,25 +265,16 @@ The system also performs lexical retrieval using PostgreSQL Full-Text Search.
 The FTS index is:
 
 ```
-```
-
-```
 ix_conversation_chunks_text_fts_gin
 ```
 
 The index uses:
 
 ```
-```
-
-```
 GIN
 ```
 
 with:
-
-```
-```
 
 ```
 to_tsvector('english', text)
@@ -328,15 +292,12 @@ Semantic and lexical retrieval are combined using Reciprocal Rank Fusion (RRF).
 
 The goal is to combine:
 
--  semantic similarity 
--  lexical relevance 
+- semantic similarity
+- lexical relevance
 
 without relying exclusively on either retrieval strategy.
 
 Conceptually:
-
-```
-```
 
 ```
 Complaint
@@ -369,18 +330,18 @@ Knowledge-base evidence is treated differently from historical conversations.
 
 Knowledge-base content is the source of truth for:
 
--  Troubleshooting steps 
--  Escalation criteria 
--  Operational recommendations 
+- Troubleshooting steps
+- Escalation criteria
+- Operational recommendations
 
 ### Historical evidence
 
 Historical conversations are used primarily for:
 
--  Similar symptoms 
--  Terminology 
--  Previously observed patterns 
--  Supporting context 
+- Similar symptoms
+- Terminology
+- Previously observed patterns
+- Supporting context
 
 Historical conversations cannot override authoritative KB instructions.
 
@@ -391,9 +352,6 @@ Historical conversations cannot override authoritative KB instructions.
 The Evidence Policy controls how retrieved information enters the LLM prompt.
 
 Current limits are:
-
-```
-```
 
 ```
 Maximum KB results: 5
@@ -410,25 +368,25 @@ This prevents the prompt from becoming unnecessarily large and reduces the possi
 
 The Resolution Service constructs a prompt using:
 
--  Complaint 
--  Complaint intelligence 
--  Retrieved historical evidence 
--  Authoritative KB evidence 
--  Evidence policy output 
+- Complaint
+- Complaint intelligence
+- Retrieved historical evidence
+- Authoritative KB evidence
+- Evidence policy output
 
 The resolution prompt explicitly instructs the LLM that:
 
-1.  KB evidence is authoritative. 
-2.  Historical conversations are supporting evidence only. 
-3.  Historical text cannot override KB instructions. 
-4.  Troubleshooting steps must not be invented. 
-5.  Explicit KB steps should be preferred. 
-6.  Historical evidence can provide symptoms and terminology. 
-7.  KB conflicts always take precedence. 
-8.  Insufficient evidence should result in further investigation or escalation. 
-9.  Evidence should be cited. 
-10.  Secrets must never be exposed. 
-11.  Escalation criteria from the KB must be respected. 
+1. KB evidence is authoritative.
+2. Historical conversations are supporting evidence only.
+3. Historical text cannot override KB instructions.
+4. Troubleshooting steps must not be invented.
+5. Explicit KB steps should be preferred.
+6. Historical evidence can provide symptoms and terminology.
+7. KB conflicts always take precedence.
+8. Insufficient evidence should result in further investigation or escalation.
+9. Evidence should be cited.
+10. Secrets must never be exposed.
+11. Escalation criteria from the KB must be respected.
 
 ---
 
@@ -437,9 +395,6 @@ The resolution prompt explicitly instructs the LLM that:
 The generated response follows a Pydantic-validated schema.
 
 The response contains:
-
-```
-```
 
 ```
 summary
@@ -451,9 +406,6 @@ citations
 ```
 
 Each citation contains:
-
-```
-```
 
 ```
 source_id
@@ -473,9 +425,6 @@ The system checks whether recommended steps are supported by the available evide
 If the generated resolution is grounded:
 
 ```
-```
-
-```
 Grounded Resolution
         |
         v
@@ -483,9 +432,6 @@ Final Response
 ```
 
 If unsupported recommendations are detected:
-
-```
-```
 
 ```
 Ungrounded Resolution
@@ -507,22 +453,19 @@ The application uses PostgreSQL with pgvector.
 
 The database stores:
 
--  Conversations 
--  Conversation chunks 
--  Embeddings 
--  Knowledge-base content 
--  Knowledge-base chunks 
--  Taxonomy information 
--  Resolution logs 
--  Retrieval information 
--  Feedback-related information 
+- Conversations
+- Conversation chunks
+- Embeddings
+- Knowledge-base content
+- Knowledge-base chunks
+- Taxonomy information
+- Resolution logs
+- Retrieval information
+- Feedback-related information
 
 Conversation chunks are linked to their parent conversations through foreign keys.
 
 The database uses specialized indexes for retrieval workloads:
-
-```
-```
 
 ```
 HNSW
@@ -541,9 +484,6 @@ PostgreSQL Full-Text Search
 Database schema and index changes are managed through Alembic.
 
 Current migration sequence:
-
-```
-```
 
 ```
 001460d0a331
@@ -574,9 +514,6 @@ This avoids loading the model during the first user request.
 Observed improvement:
 
 ```
-```
-
-```
 Before preload: approximately 11.9 seconds
 After preload: approximately 4.36 seconds
 ```
@@ -601,19 +538,19 @@ The Evidence Policy limits historical and KB results to reduce prompt size and L
 
 A golden retrieval evaluation set containing 30 queries is used to compare:
 
--  Semantic retrieval 
--  PostgreSQL Full-Text Search 
--  Hybrid RRF retrieval 
+- Semantic retrieval
+- PostgreSQL Full-Text Search
+- Hybrid RRF retrieval
 
 Current results:
 
-| Method     | Recall\@5 | Recall\@10 | MRR    | nDCG\@10 |
-| ---------- | --------- | ---------- | ------ | -------- |
-| Semantic   | 0.3000    | 0.3000     | 0.2944 | 0.2663   |
-| FTS        | 0.0500    | 0.0833     | 0.0250 | 0.0373   |
-| Hybrid RRF | 0.3333    | 0.3500     | 0.2844 | 0.2740   |
+| Method     | Recall@5 | Recall@10 | MRR    | nDCG@10 |
+| ---------- | -------- | --------- | ------ | ------- |
+| Semantic   | 0.3000   | 0.3000    | 0.2944 | 0.2663  |
+| FTS        | 0.0500   | 0.0833    | 0.0250 | 0.0373  |
+| Hybrid RRF | 0.3333   | 0.3500    | 0.2844 | 0.2740  |
 
-Hybrid retrieval currently provides the strongest Recall\@5, Recall\@10, and nDCG\@10 results.
+Hybrid retrieval currently provides the strongest Recall@5, Recall@10, and nDCG@10 results.
 
 Semantic retrieval has slightly higher MRR than hybrid retrieval.
 
@@ -622,9 +559,6 @@ Semantic retrieval has slightly higher MRR than hybrid retrieval.
 ## 19. End-to-End Performance
 
 For the representative broadband complaint, the current warm API execution produced:
-
-```
-```
 
 ```
 Intelligence:             1936.13 ms
@@ -643,9 +577,6 @@ Total:                     4628.31 ms
 The measured end-to-end latency for this request was approximately:
 
 ```
-```
-
-```
 4.63 seconds
 ```
 
@@ -656,9 +587,6 @@ The largest components are complaint intelligence inference and LLM resolution g
 ## 20. Monitoring
 
 Resolution requests are logged with structured operational information including:
-
-```
-```
 
 ```
 complaint
@@ -681,19 +609,19 @@ created_at
 
 The monitoring script reports:
 
--  Total requests 
--  Successful requests 
--  Failed requests 
--  Success rate 
--  Failure rate 
--  Grounding rate 
--  Average latency 
--  Median latency 
--  P95 latency 
--  Average confidence 
--  Average retrieved evidence 
--  Average authoritative evidence 
--  Error types 
+- Total requests
+- Successful requests
+- Failed requests
+- Success rate
+- Failure rate
+- Grounding rate
+- Average latency
+- Median latency
+- P95 latency
+- Average confidence
+- Average retrieved evidence
+- Average authoritative evidence
+- Error types
 
 ---
 
@@ -706,9 +634,6 @@ Provider failures are represented using structured exceptions.
 HTTP 429 responses are converted into:
 
 ```
-```
-
-```
 LLMRateLimitError
 ```
 
@@ -717,16 +642,10 @@ The exception stores the provider retry delay.
 The API converts this into:
 
 ```
-```
-
-```
 HTTP 503 Service Unavailable
 ```
 
 with a:
-
-```
-```
 
 ```
 Retry-After
@@ -775,9 +694,6 @@ The current development environment uses Docker Compose for PostgreSQL.
 A production deployment can separate the system into independently scalable services:
 
 ```
-```
-
-```
                     Load Balancer
                           |
               +-----------+-----------+
@@ -796,18 +712,18 @@ A production deployment can separate the system into independently scalable serv
 
 Potential production infrastructure includes:
 
--  Multiple FastAPI instances 
--  Managed PostgreSQL 
--  pgvector 
--  Connection pooling 
--  Redis for caching 
--  Background workers 
--  Centralized logging 
--  Metrics collection 
--  Distributed tracing 
--  Secrets management 
--  Load balancing 
--  Horizontal autoscaling 
+- Multiple FastAPI instances
+- Managed PostgreSQL
+- pgvector
+- Connection pooling
+- Redis for caching
+- Background workers
+- Centralized logging
+- Metrics collection
+- Distributed tracing
+- Secrets management
+- Load balancing
+- Horizontal autoscaling
 
 The current repository demonstrates the core architecture but does not claim that all of these production infrastructure components are already deployed.
 
@@ -852,9 +768,6 @@ Top-level intents are controlled while sub-intents and products remain extensibl
 ## 25. Current Architecture Summary
 
 The implemented architecture can be summarized as:
-
-```
-```
 
 ```
 Customer Complaint
@@ -904,10 +817,3 @@ Intelligence                 |
 ```
 
 This architecture provides the foundation for a semantic telecom support-resolution assistant while keeping retrieval, evidence authority, generation, validation, and observability as separate concerns.
-
-```
-```
-
-```
-```
-
