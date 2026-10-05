@@ -159,7 +159,66 @@ This separation makes individual components independently testable and replaceab
 
 ## 3. Architecture
 
-> Architecture diagram: `docs/images/architecture.png`
+> Architecture diagram: 
+
+```mermaid
+flowchart TD
+
+    A[Support Agent] --> B[React + TypeScript Web App]
+
+    B --> C[FastAPI API Service]
+
+    C --> D[Complaint Intelligence Service]
+
+    D --> D1[Intent]
+    D --> D2[Sub-intent]
+    D --> D3[Product]
+    D --> D4[Severity]
+    D --> D5[Sentiment]
+    D --> D6[Entities]
+
+    C --> E[Resolution Service]
+
+    E --> F[Hybrid Retrieval Service]
+
+    F --> G[Semantic Vector Search]
+    F --> H[PostgreSQL Full-Text Search]
+
+    G --> I[Reciprocal Rank Fusion]
+    H --> I
+
+    I --> J[Retrieved Historical Evidence]
+
+    C --> K[Knowledge Base Retrieval]
+
+    J --> L[Evidence Policy]
+    K --> L
+
+    L --> M[Evidence Builder]
+
+    M --> N[Resolution Prompt]
+
+    N --> O[LLM Provider]
+
+    O --> P[Structured Resolution]
+
+    P --> Q[Grounding Validation]
+
+    Q --> R{Grounded?}
+
+    R -->|Yes| S[Final Resolution]
+    R -->|No| T[Safety Fallback]
+
+    S --> B
+    T --> B
+
+    C --> U[Resolution Logging]
+
+    G --> V[(PostgreSQL + pgvector)]
+    H --> V
+    K --> V
+    U --> V
+```
 
 ---
 
