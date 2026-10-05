@@ -1,4 +1,4 @@
-# Intelligent Support Ticket Resolution Assistant
+# Use Case 2 — Intelligent Support Ticket Resolution Assistant
 
 A production-oriented semantic resolution assistant for telecom customer support teams.
 
@@ -51,8 +51,7 @@ The system helps support agents resolve customer complaints by combining structu
 - [41. Limitations](#41-limitations)
 - [42. Future Improvements](#42-future-improvements)
 - [43. Project Status](#43-project-status)
-- [44. Final Submission Checklist](#44-final-submission-checklist)
-- [45. Conclusion](#45-conclusion)
+- [44. Conclusion](#45-conclusion)
 - [License](#license)
 
 ---
@@ -788,14 +787,21 @@ The frontend communicates with the FastAPI backend.
 
 ## 23. Screenshots
 
-Screenshots will be added before final submission.
+### Use Case 2 — Intelligent Support Ticket Resolution Assistant
 
-Planned screenshots:
+The following screenshots demonstrate the end-to-end support resolution workflow, from submitting a natural-language customer complaint to generating a grounded resolution with evidence and knowledge-base citations.
 
-- Support assistant interface
-- Complaint intelligence
-- Generated resolution
-- Evidence and citations
+**Support assistant interface and customer complaint**
+
+![Support assistant interface](docs/images/use-case-2-resolution1.png)
+
+**Complaint intelligence**
+
+![Complaint intelligence](docs/images/use-case-2-resolution2.png)
+
+**Generated resolution, grounding and knowledge sources**
+
+![Generated resolution and evidence](docs/images/use-case-2-resolution3.png)
 
 ## 24. Production-Scale Considerations
 
@@ -1449,40 +1455,13 @@ The current deployment is primarily Docker Compose + FastAPI + React + PostgreSQ
 | Automated tests | ✅ Complete |
 | Docker PostgreSQL setup | ✅ Complete |
 | React frontend | ✅ Complete |
-| Production documentation | 🔄 Finalization |
-| Frontend screenshots | ⏳ Pending |
-| Final repository cleanup | ⏳ Pending |
+| Production documentation | ✅ Complete |
+| Frontend screenshots | ✅ Complete |
+| Final repository cleanup | ✅ Complete |
 
 ---
 
-## 44. Final Submission Checklist
-
-- [ ] README finalized
-- [ ] Architecture diagram included
-- [ ] Architecture documentation completed
-- [ ] Retrieval evaluation documented
-- [ ] Production design documented
-- [ ] Monitoring documented
-- [ ] Taxonomy evolution documented
-- [ ] Frontend screenshots added
-- [ ] `.env` excluded from Git
-- [ ] No API keys committed
-- [ ] Docker Compose verified
-- [ ] Alembic migrations verified
-- [ ] Retrieval evaluation executed
-- [ ] Monitoring executed
-- [ ] Backend tests passing
-- [ ] Repository tests passing
-- [ ] Ruff checked
-- [ ] mypy checked
-- [ ] Temporary files removed
-- [ ] Git status reviewed
-- [ ] GitHub repository reviewed
-- [ ] Final commit created
-
----
-
-## 45. Conclusion
+## 44. Conclusion
 
 This project implements an **evidence-grounded semantic resolution assistant** for telecom customer support.
 
