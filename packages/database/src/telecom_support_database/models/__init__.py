@@ -19,6 +19,8 @@ from telecom_support_database.models.ingestion import (
 from telecom_support_database.models.ingestion import (
     IngestionRunStatus as IngestionRunStatus,
 )
-from .chunk import ConversationChunk
-from .kb import KBChunk, KBDocument
-from .resolution import ResolutionLog
+
+from .chunk import ConversationChunk as ConversationChunk
+from .kb import KBChunk as KBChunk
+from .kb import KBDocument as KBDocument
+from .resolution import ResolutionLog as ResolutionLog

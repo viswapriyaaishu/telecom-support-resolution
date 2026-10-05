@@ -1,3 +1,5 @@
+import time
+
 from app.db.session import SessionLocal
 from app.services.fts import FTSService
 
@@ -11,12 +13,17 @@ def main() -> None:
     with SessionLocal() as session:
         service = FTSService(session)
 
+        start = time.perf_counter()
+
         results = service.search(
             query,
             top_k=5,
         )
 
+        elapsed = time.perf_counter() - start
+
         print(f"\nQuery: {query}\n")
+        print(f"FTS search time: {elapsed * 1000:.2f} ms")
         print(f"Retrieved: {len(results)} results\n")
 
         for index, result in enumerate(results, start=1):

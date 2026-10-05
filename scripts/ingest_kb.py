@@ -1,10 +1,8 @@
 from pathlib import Path
 
-from sqlalchemy import select
-
 from app.db.session import SessionLocal
-from telecom_support_database.models.kb import KBDocument, KBChunk
-
+from sqlalchemy import select
+from telecom_support_database.models.kb import KBChunk, KBDocument
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 KB_FILE = PROJECT_ROOT / "knowledge-base" / "connectivity-troubleshooting.md"

@@ -2,7 +2,6 @@ from collections.abc import Iterator
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
 from telecom_support_database.models.chunk import ConversationChunk
 
 
@@ -43,5 +42,5 @@ class EmbeddingRepository:
         if len(chunks) != len(embeddings):
             raise ValueError("Chunks and embeddings must have the same length.")
 
-        for chunk, embedding in zip(chunks, embeddings):
+        for chunk, embedding in zip(chunks, embeddings, strict=True):
             chunk.embedding = embedding

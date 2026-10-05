@@ -5,17 +5,18 @@ Revises: d77f6ff273c9
 Create Date: 2026-10-04 17:13:48.899985
 
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
+from alembic import op
+
 # revision identifiers, used by Alembic.
 revision: str = '001460d0a331'
-down_revision: Union[str, Sequence[str], None] = 'd77f6ff273c9'
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = 'd77f6ff273c9'
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -32,13 +33,22 @@ def upgrade() -> None:
     sa.Column('retrieval_count', sa.Integer(), nullable=False),
     sa.Column('authoritative_evidence_count', sa.Integer(), nullable=False),
     sa.Column('grounded', sa.Boolean(), nullable=False),
-    sa.Column('unsupported_steps', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+    sa.Column(
+    'unsupported_steps',
+    postgresql.JSONB(astext_type=sa.Text()),
+    nullable=False,
+    ),
     sa.Column('resolution_confidence', sa.Float(), nullable=False),
     sa.Column('resolution_summary', sa.Text(), nullable=False),
     sa.Column('latency_ms', sa.Float(), nullable=False),
     sa.Column('error_type', sa.String(length=100), nullable=True),
     sa.Column('error_message', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column(
+    'created_at',
+    sa.DateTime(timezone=True),
+    server_default=sa.text('now()'),
+    nullable=False,
+    ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

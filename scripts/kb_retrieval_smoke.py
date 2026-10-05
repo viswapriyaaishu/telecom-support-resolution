@@ -1,8 +1,6 @@
-from sentence_transformers import SentenceTransformer
-
-from app.db.session import SessionLocal
 from app.db.repositories.kb import KBRepository
-
+from app.db.session import SessionLocal
+from sentence_transformers import SentenceTransformer
 
 MODEL_NAME = "BAAI/bge-large-en-v1.5"
 

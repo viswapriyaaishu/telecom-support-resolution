@@ -5,18 +5,18 @@ Revises: c3877fc121ae
 Create Date: 2026-10-04 11:14:29.260026
 
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
+
+import pgvector
+import sqlalchemy as sa
 
 from alembic import op
-import sqlalchemy as sa
-import pgvector
-
 
 # revision identifiers, used by Alembic.
 revision: str = 'd77f6ff273c9'
-down_revision: Union[str, Sequence[str], None] = 'c3877fc121ae'
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = 'c3877fc121ae'
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -29,7 +29,12 @@ def upgrade() -> None:
     sa.Column('version', sa.String(length=50), nullable=False),
     sa.Column('category', sa.String(length=100), nullable=False),
     sa.Column('authority', sa.String(length=100), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column(
+    'created_at',
+    sa.DateTime(timezone=True),
+    server_default=sa.text('now()'),
+    nullable=False,
+    ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('document_id')
     )
@@ -40,11 +45,21 @@ def upgrade() -> None:
     sa.Column('section', sa.String(length=255), nullable=False),
     sa.Column('text', sa.Text(), nullable=False),
     sa.Column('embedding', pgvector.sqlalchemy.vector.VECTOR(dim=1024), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column(
+    'created_at',
+    sa.DateTime(timezone=True),
+    server_default=sa.text('now()'),
+    nullable=False,
+    ),
     sa.ForeignKeyConstraint(['document_id'], ['kb_documents.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('ix_kb_chunks_document_id', 'kb_chunks', ['document_id'], unique=False)
+    op.create_index(
+    'ix_kb_chunks_document_id',
+    'kb_chunks',
+    ['document_id'],
+    unique=False,
+    )
     # ### end Alembic commands ###
 
 

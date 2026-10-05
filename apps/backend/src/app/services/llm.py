@@ -1,3 +1,4 @@
+import re
 from typing import Protocol
 
 import httpx
@@ -15,6 +16,19 @@ class LLMProvider(Protocol):
         ...
 
 
+class LLMRateLimitError(RuntimeError):
+    """Raised when the LLM provider rate-limits a request."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        retry_after_seconds: float | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.retry_after_seconds = retry_after_seconds
+
+
 class OpenAICompatibleProvider:
     def __init__(
         self,
@@ -26,6 +40,27 @@ class OpenAICompatibleProvider:
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.model = model
+
+    @staticmethod
+    def _retry_delay(response: httpx.Response) -> float:
+        retry_after = response.headers.get("retry-after")
+
+        if retry_after:
+            try:
+                return max(float(retry_after), 0.0)
+            except ValueError:
+                pass
+
+        match = re.search(
+            r"try again in ([0-9]+(?:\.[0-9]+)?)s",
+            response.text,
+            re.IGNORECASE,
+        )
+
+        if match:
+            return max(float(match.group(1)), 0.0)
+
+        return 5.0
 
     async def generate(
         self,
@@ -65,6 +100,14 @@ class OpenAICompatibleProvider:
                 url,
                 headers=headers,
                 json=payload,
+            )
+
+        if response.status_code == 429:
+            retry_after = self._retry_delay(response)
+
+            raise LLMRateLimitError(
+                "LLM provider rate limit exceeded.",
+                retry_after_seconds=retry_after,
             )
 
         if response.is_error:

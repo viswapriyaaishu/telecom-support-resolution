@@ -3,8 +3,7 @@ from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
-from telecom_support_database.models.kb import KBDocument, KBChunk
+from telecom_support_database.models.kb import KBChunk, KBDocument
 
 
 @dataclass(frozen=True)

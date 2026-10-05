@@ -97,3 +97,20 @@ docker-data/
 # Generated embedding checkpoints
 data/embedding_checkpoint/
 data/embedding_checkpoint_1033/
+
+# ============================================================
+# Generated evaluation / embedding artifacts
+# ============================================================
+
+data/evaluation/resolved_candidates.json
+data/embeddings/
+data/embedding_checkpoint_remaining/
+data/embedding_checkpoint_remaining.zip
+data/embedding_queue.csv
+
+# ============================================================
+# Temporary embedding investigation scripts
+# ============================================================
+
+check_v3_embeddings.py
+check_v3_overlap.py

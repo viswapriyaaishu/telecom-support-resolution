@@ -1,9 +1,7 @@
-from sqlalchemy import select
-from sentence_transformers import SentenceTransformer
-
 from app.db.session import SessionLocal
+from sentence_transformers import SentenceTransformer
+from sqlalchemy import select
 from telecom_support_database.models.kb import KBChunk
-
 
 MODEL_NAME = "BAAI/bge-large-en-v1.5"
 
@@ -30,7 +28,7 @@ def main() -> None:
             show_progress_bar=False,
         )
 
-        for chunk, embedding in zip(chunks, embeddings):
+        for chunk, embedding in zip(chunks, embeddings, strict=True):
             chunk.embedding = embedding.tolist()
 
         session.commit()

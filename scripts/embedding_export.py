@@ -1,10 +1,8 @@
 import csv
 from pathlib import Path
 
-from sqlalchemy import text
-
 from app.db.session import SessionLocal
-
+from sqlalchemy import text
 
 OUTPUT = Path("data/embedding_queue.csv")
 

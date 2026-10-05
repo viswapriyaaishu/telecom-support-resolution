@@ -80,10 +80,12 @@ The JSON MUST follow these exact field requirements:
 - diagnosis: a non-empty string
 - recommended_steps: an array of one or more strings
 - escalation_required: a boolean
-- confidence: a numeric value between 0.0 and 1.0, never a word such as "high", "medium", or "low"
+- confidence: a numeric value between 0.0 and 1.0,
+  never a word such as "high", "medium", or "low"
 - citations: an array of objects, where every object has:
   - source_id: a string containing the exact Source ID of the evidence used
-  - section: a string containing the exact Section of the evidence, or null if unavailable
+  - section: a string containing the exact Section of the evidence,
+  or null if unavailable
 
 Do not return confidence as a descriptive word.
 Do not return citation IDs as plain strings.

@@ -1,11 +1,10 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
-
-from pgvector.sqlalchemy import Vector
 
 from telecom_support_database.base import Base
 

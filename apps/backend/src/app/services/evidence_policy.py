@@ -13,7 +13,7 @@ class EvidencePolicy:
     """
 
     max_kb_results: int = 5
-    max_historical_results: int = 3
+    max_historical_results: int = 1
 
     def select(
         self,

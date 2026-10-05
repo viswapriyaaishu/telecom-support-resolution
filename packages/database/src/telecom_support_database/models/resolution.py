@@ -3,7 +3,8 @@ from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy import DateTime, Float, Integer, String, Text, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from telecom_support_database.base import Base

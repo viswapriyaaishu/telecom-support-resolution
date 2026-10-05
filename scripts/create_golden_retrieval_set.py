@@ -1,0 +1,245 @@
+import json
+from pathlib import Path
+
+OUTPUT = Path("data/evaluation/golden_retrieval.json")
+
+
+GOLDEN_SET = [
+    {
+        "id": "RET-001",
+        "query": "My smart home devices will not connect to my mobile network.",
+        "relevant_conversation_ids": [
+            "9d592070-9010-4cb0-ace6-827482ac8433",
+            "c30fbc17-8e98-4dce-961a-6dbec1c6675f",
+        ],
+    },
+    {
+        "id": "RET-002",
+        "query": "The VPN on my phone refuses to establish a connection even after reinstalling it.",
+        "relevant_conversation_ids": [
+            "5c41844a-3652-421e-b87e-886b3363048e",
+            "8e0e6d35-53d4-4bd5-af2c-58c0a0e1ebf0",
+            "ae0f603d-37b5-44cb-9d3a-bc70bb95a141",
+        ],
+    },
+    {
+        "id": "RET-003",
+        "query": "I cannot send or receive text messages when communicating internationally.",
+        "relevant_conversation_ids": [
+            "0553f8e9-0405-4afa-8ec4-14a2947a5889",
+            "eb41f0cc-cd2d-434f-a771-483a4d7d0c4f",
+        ],
+    },
+    {
+        "id": "RET-004",
+        "query": "My phone is not showing the data I was supposed to carry over from my previous allowance.",
+        "relevant_conversation_ids": [
+            "9461be3c-cf35-4aff-bccd-ff107d19e6e4",
+        ],
+    },
+    {
+        "id": "RET-005",
+        "query": "I have no mobile signal in my area and cannot make calls.",
+        "relevant_conversation_ids": [
+            "b24d34fc-f74c-4f4c-846e-b0aa3d2b368f",
+            "8b552546-93fd-462a-b000-8707c478d373",
+        ],
+    },
+    {
+        "id": "RET-006",
+        "query": "My internet connection does not work while I am travelling abroad.",
+        "relevant_conversation_ids": [
+            "2dd00e65-c464-45a3-b321-cb1324a5f06f",
+            "045f754d-43cd-4702-814c-452c7e2ea2e8",
+            "ee0d271f-1c82-4681-bde4-beffcc623ff7",
+        ],
+    },
+    {
+        "id": "RET-007",
+        "query": "My tablet operating system is malfunctioning even after restarting it.",
+        "relevant_conversation_ids": [
+            "558199c9-461c-4e2b-bec5-8bb312199144",
+        ],
+    },
+    {
+        "id": "RET-008",
+        "query": "I cannot connect my device to the carrier's mobile Wi-Fi service.",
+        "relevant_conversation_ids": [
+            "92f9b0b8-b82a-41cb-be08-f3f2cc913a5b",
+        ],
+    },
+    {
+        "id": "RET-009",
+        "query": "My wearable is not syncing correctly with my phone.",
+        "relevant_conversation_ids": [
+            "e50324bf-5991-44c2-9206-9144171bdb54",
+            "71aaa1cf-0211-4e40-82b4-7efe14b62104",
+        ],
+    },
+    {
+        "id": "RET-010",
+        "query": "The augmented reality feature on my phone says the device is unsupported.",
+        "relevant_conversation_ids": [
+            "8394b423-84e8-4623-9ffa-30b603b1b0fe",
+        ],
+    },
+    {
+        "id": "RET-011",
+        "query": "Wi-Fi calling is enabled but does not work on my phone.",
+        "relevant_conversation_ids": [
+            "fae79ff9-e1b5-4887-96d7-b0b389e6b2df",
+        ],
+    },
+    {
+        "id": "RET-012",
+        "query": "I was charged for a subscription I never signed up for and want a refund.",
+        "relevant_conversation_ids": [
+            "b9a23ebe-4c94-45f6-882a-53184fb98591",
+        ],
+    },
+    {
+        "id": "RET-013",
+        "query": "Software updates on my phone fail to download or install.",
+        "relevant_conversation_ids": [
+            "f6763e99-9f30-4dee-8855-632f1a62a020",
+        ],
+    },
+    {
+        "id": "RET-014",
+        "query": "My cloud machine learning job fails because it reports insufficient memory.",
+        "relevant_conversation_ids": [
+            "bf007cf3-e831-46b8-8e84-e4c2611aacc3",
+            "d406c819-3636-4f2d-b822-fe9add4b14b8",
+        ],
+    },
+    {
+        "id": "RET-015",
+        "query": "My phone's hotspot will not connect and I need it for work.",
+        "relevant_conversation_ids": [
+            "b0c30b00-2a53-4225-b058-3fa2b54216db",
+        ],
+    },
+    {
+        "id": "RET-016",
+        "query": "Call waiting does not notify me when another person calls during an existing call.",
+        "relevant_conversation_ids": [
+            "3c1d635f-f3a4-4bcc-b45b-261f12b85d80",
+            "8d91283c-9b44-4550-9bf3-d2152d930b2a",
+        ],
+    },
+    {
+        "id": "RET-017",
+        "query": "My ebooks and audiobooks fail to download and the app crashes.",
+        "relevant_conversation_ids": [
+            "76afea8d-96a4-4d51-9eac-3d8717e3d311",
+        ],
+    },
+    {
+        "id": "RET-018",
+        "query": "My IoT devices are connected through a cellular router but the connection keeps dropping.",
+        "relevant_conversation_ids": [
+            "20300c01-f3cf-4a3f-91ea-f4d8342aec0c",
+        ],
+    },
+    {
+        "id": "RET-019",
+        "query": "The IoT platform does not display usage statistics for my devices.",
+        "relevant_conversation_ids": [
+            "2753432f-0aad-405a-801f-326e1ab36297",
+        ],
+    },
+    {
+        "id": "RET-020",
+        "query": "My fitness application is not synchronizing activity data correctly.",
+        "relevant_conversation_ids": [
+            "25bc7fb4-e690-4964-949e-e34145e1bffa",
+        ],
+    },
+    {
+        "id": "RET-021",
+        "query": "The call blocking feature does not stop unwanted numbers from reaching me.",
+        "relevant_conversation_ids": [
+            "c06e97d5-4b88-4fc0-92b6-ca929f2d8c11",
+        ],
+    },
+    {
+        "id": "RET-022",
+        "query": "My home internet periodically stops working and I have to restart the device.",
+        "relevant_conversation_ids": [
+            "291691fb-640f-4d64-83ae-8ebf6a8e897d",
+        ],
+    },
+    {
+        "id": "RET-023",
+        "query": "My 5G connection has severe latency while playing online games.",
+        "relevant_conversation_ids": [
+            "c7a448e9-59df-4ebd-b65f-80b953d8e8a0",
+        ],
+    },
+    {
+        "id": "RET-024",
+        "query": "My 4G connection is extremely slow even though my phone shows full signal.",
+        "relevant_conversation_ids": [
+            "dd3d20de-165b-4df2-a1e7-5b547c8c4440",
+        ],
+    },
+    {
+        "id": "RET-025",
+        "query": "I cannot use my mobile service properly because international coverage is limited while travelling.",
+        "relevant_conversation_ids": [
+            "293ab6a4-b7c2-4a77-bcc9-99587ac2bd1a",
+            "045f754d-43cd-4702-814c-452c7e2ea2e8",
+        ],
+    },
+    {
+        "id": "RET-026",
+        "query": "My navigation application freezes and crashes repeatedly.",
+        "relevant_conversation_ids": [
+            "4a202b8d-3517-4414-b9cb-67f2a28df2c7",
+        ],
+    },
+    {
+        "id": "RET-027",
+        "query": "My cloud gaming application cannot find the game server.",
+        "relevant_conversation_ids": [
+            "f79f4e47-a730-4f8f-a822-f2dd392752f7",
+        ],
+    },
+    {
+        "id": "RET-028",
+        "query": "I cannot connect my Cloud DVR to my smart television and speaker.",
+        "relevant_conversation_ids": [
+            "dc5c95d5-3381-4db3-9afa-780b9a9c31b7",
+        ],
+    },
+    {
+        "id": "RET-029",
+        "query": "My phone's mobile data keeps disconnecting every few minutes.",
+        "relevant_conversation_ids": [
+            "35ccba57-0ad0-4d08-91a7-5b64d0995525"
+        ],
+    },
+    {
+        "id": "RET-030",
+        "query": "I cannot retrieve my backed-up files because my account has become locked.",
+        "relevant_conversation_ids": [
+            "ccc3cd4b-ede4-40c7-b1c7-076d25b036f1",
+        ],
+    },
+]
+
+
+def main() -> None:
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+
+    OUTPUT.write_text(
+        json.dumps(GOLDEN_SET, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    print(f"Created {len(GOLDEN_SET)} retrieval evaluation queries.")
+    print(f"Saved to: {OUTPUT}")
+
+
+if __name__ == "__main__":
+    main()

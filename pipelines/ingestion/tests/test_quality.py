@@ -1,7 +1,11 @@
 from datetime import UTC, datetime
 
 from telecom_support_ingestion.models import Conversation, ConversationTurn
-from telecom_support_ingestion.quality import QualityIssue, QualityStatus, validate_conversation
+from telecom_support_ingestion.quality import (
+    QualityIssue,
+    QualityStatus,
+    validate_conversation,
+)
 
 
 def make_turn(

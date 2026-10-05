@@ -1,7 +1,6 @@
 from uuid import UUID
 
 from sqlalchemy.orm import Session
-
 from telecom_support_database.models import ResolutionLog
 
 

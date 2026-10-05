@@ -3,8 +3,8 @@ from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
 from telecom_support_database.models.chunk import ConversationChunk
+from telecom_support_database.models.conversation import Conversation
 
 
 @dataclass(frozen=True)
@@ -42,7 +42,14 @@ class RetrievalRepository:
                 ConversationChunk.text,
                 distance.label("distance"),
             )
-            .where(ConversationChunk.embedding.is_not(None))
+            .join(
+                Conversation,
+                Conversation.id == ConversationChunk.conversation_id,
+            )
+            .where(
+                ConversationChunk.embedding.is_not(None),
+                Conversation.resolution_status == "RESOLVED",
+            )
             .order_by(distance)
             .limit(top_k)
         )

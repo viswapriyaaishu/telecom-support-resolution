@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from telecom_support_ingestion.chunk import chunk_conversation
 from telecom_support_ingestion.models import Conversation, ConversationTurn
@@ -11,13 +11,13 @@ def test_chunk_conversation_splits_large_conversation() -> None:
             ConversationTurn(
                 turn_index=0,
                 speaker="CLIENT",
-                date_time=datetime(2026, 1, 1),
+                date_time=datetime(2026, 1, 1, tzinfo=UTC),
                 text="A" * 2000,
             ),
             ConversationTurn(
                 turn_index=1,
                 speaker="AGENT",
-                date_time=datetime(2026, 1, 1),
+                date_time=datetime(2026, 1, 1, tzinfo=UTC),
                 text="B" * 2000,
             ),
         ],
@@ -42,13 +42,13 @@ def test_chunk_conversation_keeps_small_conversation_together() -> None:
             ConversationTurn(
                 turn_index=0,
                 speaker="CLIENT",
-                date_time=datetime(2026, 1, 1),
+                date_time=datetime(2026, 1, 1, tzinfo=UTC),
                 text="Internet is slow.",
             ),
             ConversationTurn(
                 turn_index=1,
                 speaker="AGENT",
-                date_time=datetime(2026, 1, 1),
+                date_time=datetime(2026, 1, 1, tzinfo=UTC),
                 text="Please restart the router.",
             ),
         ],

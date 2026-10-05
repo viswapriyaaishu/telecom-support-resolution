@@ -4,7 +4,6 @@ from uuid import uuid4
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session, selectinload
-
 from telecom_support_database.models.chunk import ConversationChunk
 from telecom_support_database.models.conversation import Conversation
 

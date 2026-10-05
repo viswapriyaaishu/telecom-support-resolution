@@ -1,13 +1,15 @@
 from pathlib import Path
 
 import numpy as np
+from app.db.session import SessionLocal
 from sqlalchemy import text
 
-from app.db.session import SessionLocal
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-
-CHECKPOINT_DIR = Path(
-    r"D:\Development\telecom-support-resolution\data\embedding_checkpoint_1033"
+CHECKPOINT_DIR = (
+    PROJECT_ROOT
+    / "data"
+    / "embedding_checkpoint_remaining"
 )
 
 
@@ -51,6 +53,8 @@ def main() -> None:
                 for chunk_id, embedding in zip(
                     chunk_ids,
                     embeddings,
+                    strict=True,
+
                 )
             ]
 

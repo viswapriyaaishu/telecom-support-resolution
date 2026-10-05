@@ -8,8 +8,8 @@ from collections.abc import Sequence
 
 import pgvector.sqlalchemy
 import sqlalchemy as sa
-from alembic import op
 
+from alembic import op
 
 revision: str = "c428420bc910"
 down_revision: str | Sequence[str] | None = "846cb81de51e"

@@ -1,13 +1,12 @@
 from dataclasses import dataclass
 
 from sqlalchemy.orm import Session
-
 from telecom_support_database.models.chunk import ConversationChunk
-
-from app.db.repositories.chunk import ChunkRepository
 from telecom_support_ingestion.chunk import chunk_conversation
 from telecom_support_ingestion.models import Conversation as IngestionConversation
 from telecom_support_ingestion.models import ConversationTurn as IngestionTurn
+
+from app.db.repositories.chunk import ChunkRepository
 
 
 @dataclass(frozen=True)
